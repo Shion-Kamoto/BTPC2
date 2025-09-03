@@ -274,7 +274,7 @@ impl SyncManager {
     }
 
     async fn create_block_locator(&self) -> Result<BlockLocator, SyncError> {
-        Ok(BlockLocator::new(vec![], Hash::zero()))
+        Ok(BlockLocator::new(vec![], Hash::from_bytes([0u8; 64])))
     }
 
     async fn get_blocks_to_download(&self) -> Result<Vec<Hash>, SyncError> {
@@ -282,8 +282,8 @@ impl SyncManager {
     }
 
     pub fn handle_inv_message(&self, inv: InvMessage, _peer_id: &str) -> Result<(), SyncError> {
-        for item in inv.inventory {
-            match item.type_id {
+        for item in inv.items {
+            match item.kind {
                 2 => {
                     // MSG_BLOCK
                     if !self.is_block_known(&item.hash) {

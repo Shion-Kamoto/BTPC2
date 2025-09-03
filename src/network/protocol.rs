@@ -117,7 +117,7 @@ mod builtin_crypto {
     }
 
     impl PublicKeyBuiltin {
-        pub fn to_bytes(&self) -> [u8; 32] {
+        pub fn as_bytes(&self) -> [u8; 32] {
             self.key
         }
     }
@@ -138,7 +138,7 @@ mod builtin_crypto {
     }
 }
 
-use builtin_crypto::{sha512_hash, PublicKeyBuiltin as PublicKey, PublicKeyBuiltin as Public};
+use builtin_crypto::{sha512_hash, PublicKeyBuiltin as PublicKey};
 
 /// Compact transaction reference.
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Eq)]
@@ -222,11 +222,12 @@ pub struct Block {
 
 impl Block {
     pub fn merkle_root(&self) -> Hash {
-        let mut mt = MerkleTree::new(/* &[[u8; 64]] */);
-        for h in &self.tx_hashes {
-            mt.push(h.as_bytes());
+        if self.tx_hashes.is_empty() {
+            return Hash([0u8; 64]);
         }
-        Hash(mt.expect("REASON").root())
+        let leaves: Vec<[u8; 64]> = self.tx_hashes.iter().map(|h| *h.as_bytes()).collect();
+        let t = MerkleTree::new(&leaves).expect("merkle requires at least one leaf");
+        Hash(t.root())
     }
 }
 
@@ -278,7 +279,7 @@ impl PeerInfo {
     pub fn id(&self) -> String {
         let mut hasher = Sha512::new();
         hasher.update(self.address.to_string());
-        hasher.update(self.public_key.to_bytes());
+        hasher.update(self.public_key.as_bytes());
         hex::encode(hasher.finalize())
     }
 
@@ -443,5 +444,20 @@ mod tests {
         let restored = NetworkMessage::from_bytes(&bytes).expect("deserialize");
         assert_eq!(msg, restored);
         assert!(matches!(restored, NetworkMessage::Version(_)));
+    }
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
+pub struct GetBlocksMessage {
+    pub version: u32,
+    pub block_locator_hashes: Vec<Hash>,
+    pub hash_stop: Hash,
+}
+
+impl Hash {
+    /// Return the all-zero 64-byte hash.
+    #[inline]
+    pub fn zero() -> Self {
+        Hash([0u8; 64])
     }
 }
