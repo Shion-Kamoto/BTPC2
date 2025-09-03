@@ -1,0 +1,20 @@
+/target/
+**/*.rs.bk
+*.log
+*.db
+*.ldb
+*.sst
+*.backup
+*.dump
+.DS_Store
+.idea/
+.vscode/
+/nbproject/
+/env/
+/coverage/
+*.swp
+*.swo
+*~
+
+# Project exclude paths
+/tests/

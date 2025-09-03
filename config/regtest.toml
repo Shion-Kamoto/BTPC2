@@ -1,0 +1,108 @@
+# config/regtest.toml
+# Regression test network configuration for development and testing
+
+[network]
+bootnodes = []  # No bootnodes for regtest - manual peer connection only
+listen_addresses = [
+    "/ip4/0.0.0.0/tcp/18444",
+    "/ip4/0.0.0.0/tcp/18445/ws"
+]
+max_peers = 10  # Limited peers for local testing
+external_address = "/ip4/127.0.0.1/tcp/18444"
+
+[consensus]
+target_block_time = 60  # 1 minute for fast testing
+difficulty_adjustment_blocks = 144  # Adjust every 144 blocks (1 day at 1min blocks)
+initial_difficulty = "7fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff"  # Very easy difficulty
+max_block_size = 16777216  # 16MB for testing large blocks
+max_transaction_size = 4194304  # 4MB for testing large transactions
+
+[rewards]
+initial_reward = 100000000000  # 1000 BTP in satoshis for testing
+tail_reward = 500000000  # 5 BTP in satoshis for testing
+decay_period_years = 100  # Very long decay period for testing
+block_reward_halving_interval = 150  # Frequent halving for testing
+
+[database]
+path = "data/regtest"
+cache_size_mb = 256  # 256MB cache for testing
+max_open_files = 1000
+compaction_style = "universal"
+create_if_missing = true
+error_if_exists = false
+wal_dir = "data/regtest/wal"
+
+[rpc]
+enabled = true
+bind_address = "127.0.0.1:18332"
+max_connections = 20
+enable_cors = true
+cors_origin = "*"
+rpc_user = "regtest"
+rpc_password = "regtest"
+
+[wallet]
+enabled = true
+keypool_size = 100
+rescan = false  # No rescan for faster testing
+disable_private_keys = false
+wallet_name = "regtest_wallet"
+
+[mining]
+enabled = true
+threads = 1  # Single thread for testing
+batch_size = 10
+target_block_time = 60
+mine_empty_blocks = true  # Mine even if no transactions
+mine_callback_url = ""
+
+[logging]
+level = "debug"  # Debug level for detailed testing
+file = "logs/regtest.log"
+max_files = 5
+max_file_size_mb = 50
+console_output = true
+log_thread_names = true
+
+[metrics]
+enabled = false  # Usually disabled for regtest
+bind_address = "127.0.0.1:19090"
+collection_interval = 30  # seconds
+
+[api]
+enabled = true
+bind_address = "127.0.0.1:18080"
+enable_swagger = true
+max_body_size_mb = 50  # Larger for testing
+
+[mempool]
+max_size_mb = 64  # 64MB mempool for testing
+max_transactions = 1000
+min_relay_fee = 0  # No fee for testing
+max_orphan_transactions = 50
+reject_absolute_fee = false  # Accept any fee for testing
+
+[peering]
+discovery_enabled = false  # Manual peer management for regtest
+advertise_self = false
+connection_timeout = 10  # seconds
+ping_interval = 30  # seconds
+ban_threshold = 1000  # Very high threshold - don't ban in regtest
+ban_duration = 0  # No banning
+
+[advanced]
+pruning_enabled = false
+prune_depth = 1000  # Keep last 1000 blocks
+tx_index = true
+address_index = true
+timestamp_index = true
+generate_genesis = true  # Generate new genesis block for each regtest instance
+allow_min_difficulty_blocks = true  # Allow low difficulty blocks
+test_emergency_difficulty_reset = true  # Allow difficulty reset for testing
+
+[regtest_specific]
+premine_amount = 1000000000000  # 10,000 BTP premine for testing
+premine_address = "mqRegTestAddressForPremineCoins123456"
+generate_blocks_on_startup = 100  # Generate 100 blocks at startup
+automine = true  # Automatically mine blocks when transactions arrive
+mock_time = false  # Use real time instead of mocked time

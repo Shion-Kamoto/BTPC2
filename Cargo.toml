@@ -1,0 +1,87 @@
+[package]
+name = "btpc-quantum-resistant-chain"
+version = "0.1.0"
+edition = "2021"
+description = "A quantum-resistant blockchain with SHA512 and linear decay rewards"
+license = "MIT OR Apache-2.0"
+authors = ["Your Name <your.email@example.com>"]
+repository = "https://github.com/your-username/quantum-resistant-chain"
+
+[dependencies]
+rocksdb = { version = "0.21", optional = true, features = ["multi-threaded-cf"] }
+tokio = { version = "1.0", features = ["full", "rt-multi-thread", "macros"] }
+sha2 = "0.10"
+blake3 = "1.0"
+pqcrypto-sphincsplus = "0.7.2"
+pqcrypto-traits = "0.3"
+rayon = "1.8"
+serde = { version = "1.0", features = ["derive"] }
+serde_bytes = "0.11"
+serde_json = "1.0"
+anyhow = "1.0"
+thiserror = "1.0"
+log = "0.4"
+env_logger = "0.10"
+hex = "0.4"
+num-bigint = "0.4"
+num-traits = "0.2"
+chrono = { version = "0.4", features = ["serde"] }
+config = "0.13"
+clap = { version = "4.0", features = ["derive"] }
+lazy_static = "1.4"
+arc-swap = "1.6"
+dashmap = "5.0"
+tracing = "0.1"
+tracing-subscriber = "0.3"
+ed25519-dalek = { version = "1.0.1", features = ["serde", "rand"] }
+rand = "0.8"
+zeroize = { version = "1.5", features = ["derive"] }
+bincode = "1.3"
+parking_lot = "0.12" # Alternatively, use std::sync::RwLock
+toml = "0.8"
+dirs = "5.0"
+
+# Network dependencies
+async-trait = "0.1"
+futures = "0.3"
+bytes = "1.0"
+
+# For DNS resolution
+trust-dns-resolver = { version = "0.20", features = ["tokio"] }
+
+# If you want to use a persistent database backend:
+sled = { version = "0.34", optional = true }
+
+
+
+# Libp2p with correct features
+libp2p = { version = "0.52", features = [
+    "tcp",
+    "websocket",
+    "dns",
+    "kad",
+    "gossipsub",
+    "identify",
+    "ping",
+    "noise",
+    "yamux",
+    "tls"
+] }
+
+[dev-dependencies]
+tempfile = "3.0"
+rstest = "0.18"
+tokio-test = "0.4"
+
+[profile.release]
+lto = true
+codegen-units = 1
+panic = "abort"
+opt-level = 3
+
+[features]
+default = ["database", "in-memory"]
+database = ["rocksdb"]
+avx2 = []
+in-memory = []
+persistent = ["rocksdb"] # or ["sled"]

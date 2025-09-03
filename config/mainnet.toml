@@ -1,0 +1,157 @@
+# config/mainnet.toml
+# Main network configuration for Quantum-Resistant Blockchain
+
+[network]
+bootnodes = [
+    "/ip4/18.144.1.23/tcp/8333/p2p/12D3KooWMainNode1",
+    "/ip4/52.34.156.78/tcp/8333/p2p/12D3KooWMainNode2",
+    "/ip4/138.197.212.45/tcp/8333/p2p/12D3KooWMainNode3",
+    "/ip4/203.0.113.10/tcp/8333/p2p/12D3KooWMainNode4",
+    "/ip4/198.51.100.25/tcp/8333/p2p/12D3KooWMainNode5"
+]
+listen_addresses = [
+    "/ip4/0.0.0.0/tcp/8333",
+    "/ip4/0.0.0.0/tcp/8334/ws",
+    "/ip6/::/tcp/8333"
+]
+max_peers = 125
+external_address = ""
+enable_upnp = true
+enable_nat_pmp = true
+
+[consensus]
+target_block_time = 600  # 10 minutes
+difficulty_adjustment_blocks = 2016  # Every 2 weeks (2016 blocks)
+initial_difficulty = "00000000ffffffffffffffffffffffffffffffffffffffffffffffffffffffff"
+max_block_size = 4000000  # 4MB
+max_transaction_size = 1000000  # 1MB
+max_sigops_per_block = 80000
+max_sigops_per_transaction = 8000
+min_transaction_fee = 1000  # 0.00001 BTP
+
+[rewards]
+initial_reward = 32375000000  # 32.375 BTP in satoshis (100 million satoshis = 1 BTP)
+tail_reward = 50000000  # 0.5 BTP in satoshis
+decay_period_years = 24
+block_reward_halving_interval = 210000  # Approximately every 4 years
+maturity_blocks = 100  # 100 blocks confirmation for coinbase maturity
+
+[database]
+path = "data/mainnet"
+cache_size_mb = 4096  # 4GB cache
+max_open_files = 50000
+compaction_style = "level"
+create_if_missing = true
+error_if_exists = false
+wal_dir = "data/mainnet/wal"
+compression_type = "lz4"
+optimize_filters_for_hits = true
+
+[rpc]
+enabled = true
+bind_address = "127.0.0.1:8332"
+max_connections = 100
+enable_cors = true
+cors_origin = "*"
+rpc_user = ""
+rpc_password = ""
+rpc_work_queue = 16
+rpc_threads = 4
+rpc_servertimeout = 30
+
+[wallet]
+enabled = true
+keypool_size = 10000
+rescan = true
+disable_private_keys = false
+wallet_name = "mainnet_wallet"
+key_derivation_path = "m/44'/1237'/0'"  # BIP-44 derivation path for BTP
+encrypt_wallet = true
+wallet_passphrase_timeout = 900  # 15 minutes
+
+[mining]
+enabled = false  # Typically disabled on mainnet nodes unless specifically mining
+threads = 0
+batch_size = 100
+target_block_time = 600
+mine_empty_blocks = false
+mining_address = ""
+mining_fee = 10000  # 0.0001 BTP
+
+[logging]
+level = "info"
+file = "logs/mainnet.log"
+max_files = 10
+max_file_size_mb = 100
+console_output = true
+log_thread_names = false
+log_source_location = false
+
+[metrics]
+enabled = true
+bind_address = "127.0.0.1:8334"
+collection_interval = 60  # seconds
+enable_histograms = true
+max_metrics_age = 3600  # 1 hour
+
+[api]
+enabled = true
+bind_address = "127.0.0.1:8080"
+enable_swagger = true
+max_body_size_mb = 10
+api_key_required = true
+rate_limit_requests = 1000
+rate_limit_period = 3600  # 1 hour
+
+[mempool]
+max_size_mb = 1024  # 1GB mempool
+max_transactions = 50000
+min_relay_fee = 1000  # 0.00001 BTP
+max_orphan_transactions = 1000
+reject_absolute_fee = true
+fee_estimation_blocks = [1, 2, 3, 6, 12, 24]
+
+[peering]
+discovery_enabled = true
+advertise_self = true
+connection_timeout = 30  # seconds
+ping_interval = 120  # seconds
+ban_threshold = 100  # malicious score
+ban_duration = 86400  # 24 hours
+max_peer_concurrent_requests = 10
+peer_connect_timeout = 10  # seconds
+
+[advanced]
+pruning_enabled = false
+prune_depth = 2880  # Keep last 2880 blocks (20 days at 10min blocks)
+tx_index = true
+address_index = true
+timestamp_index = true
+spent_index = true
+enable_bip37 = false  # Disable bloom filters for privacy
+max_upload_target = 0  # 0 = unlimited
+max_download_target = 0  # 0 = unlimited
+db_cache_compression = true
+assume_valid = ""  # Hash of assumed valid block
+
+[security]
+rpc_whitelist = ["127.0.0.1"]
+rpc_whitelist_enabled = true
+disable_rpc_commands = ["stop", "restart"]
+max_rpc_request_size = 16384  # 16KB
+ssl_enabled = false
+ssl_cert_file = ""
+ssl_key_file = ""
+
+[monitoring]
+enable_health_checks = true
+health_check_interval = 300  # 5 minutes
+enable_performance_metrics = true
+performance_sampling_interval = 60  # 1 minute
+
+[backup]
+enable_automatic_backups = true
+backup_interval = 86400  # 24 hours
+backup_retention_days = 7
+backup_directory = "backups"
+compress_backups = true

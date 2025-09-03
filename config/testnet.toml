@@ -1,0 +1,93 @@
+# config/testnet.toml
+# Test network configuration for Quantum-Resistant Blockchain
+
+[network]
+bootnodes = [
+    "/ip4/127.0.0.1/tcp/30333/p2p/12D3KooWTestNode1",
+    "/ip4/127.0.0.1/tcp/30334/p2p/12D3KooWTestNode2"
+]
+listen_addresses = [
+    "/ip4/0.0.0.0/tcp/30333",
+    "/ip4/0.0.0.0/tcp/30334/ws"
+]
+max_peers = 50
+external_address = "/ip4/127.0.0.1/tcp/30333"
+
+[consensus]
+target_block_time = 300  # 5 minutes for faster testing
+difficulty_adjustment_blocks = 2016  # Same as mainnet for consistency
+initial_difficulty = "0000ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff"
+max_block_size = 4194304  # 4MB
+max_transaction_size = 1048576  # 1MB
+
+[rewards]
+initial_reward = 32375000000  # 32.375 BTP in satoshis
+tail_reward = 50000000  # 0.5 BTP in satoshis
+decay_period_years = 24
+block_reward_halving_interval = 210000  # Same as Bitcoin
+
+[database]
+path = "data/testnet"
+cache_size_mb = 1024  # 1GB cache
+max_open_files = 10000
+compaction_style = "level"
+create_if_missing = true
+error_if_exists = false
+
+[rpc]
+enabled = true
+bind_address = "127.0.0.1:8332"
+max_connections = 100
+enable_cors = true
+cors_origin = "*"
+
+[wallet]
+enabled = true
+keypool_size = 1000
+rescan = true
+disable_private_keys = false
+
+[mining]
+enabled = true
+threads = 4
+batch_size = 100
+target_block_time = 300
+
+[logging]
+level = "info"
+file = "logs/testnet.log"
+max_files = 10
+max_file_size_mb = 100
+console_output = true
+
+[metrics]
+enabled = true
+bind_address = "127.0.0.1:9090"
+collection_interval = 60  # seconds
+
+[api]
+enabled = true
+bind_address = "127.0.0.1:8080"
+enable_swagger = true
+max_body_size_mb = 10
+
+[mempoo]
+max_size_mb = 512  # 512MB mempool
+max_transactions = 10000
+min_relay_fee = 1000  # 0.00001 BTP
+max_orphan_transactions = 100
+
+[peering]
+discovery_enabled = true
+advertise_self = true
+connection_timeout = 30  # seconds
+ping_interval = 120  # seconds
+ban_threshold = 100  # malicious score
+ban_duration = 86400  # 24 hours
+
+[advanced]
+pruning_enabled = false
+prune_depth = 288  # Keep last 48 hours of blocks (at 10min blocks)
+tx_index = true
+address_index = true
+timestamp_index = true
