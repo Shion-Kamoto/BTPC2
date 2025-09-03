@@ -1,0 +1,26 @@
+# Clippy configuration for BTPC2
+# We keep pedantic at warn initially to avoid blocking merges while tightening later.
+warn = [
+  "clippy::all",
+  "clippy::pedantic",
+  "clippy::cargo",
+]
+
+deny = [
+  "warnings",
+  "clippy::unwrap_used",
+  "clippy::expect_used",
+  "clippy::panic",
+  "clippy::todo",
+  "clippy::unimplemented",
+]
+
+# Reduce noise from common pedantic lints (adjust as the codebase stabilizes)
+allow = [
+  "clippy::module_name_repetitions",
+  "clippy::missing_panics_doc",
+  "clippy::missing_errors_doc",
+  "clippy::must_use_candidate",
+  "clippy::implicit_hasher",
+]
+

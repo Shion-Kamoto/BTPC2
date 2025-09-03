@@ -1,0 +1,11 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+echo "[pre-commit] rustfmt check..."
+cargo fmt --all -- --check
+
+echo "[pre-commit] clippy (deny warnings)..."
+cargo clippy --all-targets -- -D warnings
+
+echo "[pre-commit] tests..."
+cargo test --all --quiet
